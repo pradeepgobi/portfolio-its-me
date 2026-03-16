@@ -2,7 +2,7 @@ import { FaGithub, FaExternalLinkAlt, FaStar, FaUsers, FaCalendar } from 'react-
 
 const FeaturedProject = () => {
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen pt-20 bg-transparent">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-16">
         
         {/* Featured Project */}

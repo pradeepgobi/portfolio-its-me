@@ -1,12 +1,10 @@
-import { FaDownload } from 'react-icons/fa'
+import { FaDownload, FaAward } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
-/**
- * Resume Page
- * Display and download resume PDF
- */
 const Resume = () => {
+  const navigate = useNavigate()
+
   const handleDownload = () => {
-    // Create a link element and trigger download
     const link = document.createElement('a')
     link.href = '/pradeep.pdf'
     link.download = 'Pradeep_Resume.pdf'
@@ -16,50 +14,46 @@ const Resume = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 transition-colors duration-300">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-12">
-        
-        {/* Title */}
+    <div className="min-h-screen pt-20 bg-transparent">
+      <div className="container mx-auto px-4 max-w-5xl py-10">
+
+        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-3">
-            My Resume
-          </h1>
-          <div className="w-20 h-1 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 mx-auto rounded-full mb-4"></div>
-          <p className="text-gray-300 max-w-xl mx-auto">
-            Download my professional resume
-          </p>
+          <h1 className="text-3xl font-bold text-amber-400">Resume</h1>
+          <div className="w-16 h-1 bg-white mx-auto mt-2 rounded"></div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
-          {/* Download Button */}
-          <div className="flex justify-center mb-6">
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 text-white rounded-lg font-semibold hover:from-amber-600 hover:to-yellow-700 transition-all shadow-lg"
-            >
-              <FaDownload />
-              Download Resume PDF
-            </button>
-          </div>
+        {/* 🔥 BUTTONS */}
+        <div className="flex justify-center gap-3 mb-6 flex-wrap">
+          <button
+            onClick={handleDownload}
+            className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded text-sm hover:bg-amber-600"
+          >
+            <FaDownload /> Download
+          </button>
 
-          {/* Resume Image Preview */}
-          <div className="border-2 border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden max-w-2xl mx-auto bg-white dark:bg-gray-900 shadow-sm transition-colors duration-300">
-            <div>
-              <img 
-                src="/pradeep-page1.png" 
-                alt="Resume Page 1 - Pradeep" 
-                className="w-full h-auto"
-              />
-            </div>
-          </div>
-
-          {/* Info Section */}
-          <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg transition-colors duration-300">
-            <p className="text-sm text-gray-700 dark:text-gray-300 text-center">
-              📄 This resume is regularly updated with my latest experience and skills.
-            </p>
-          </div>
+          <button
+            onClick={() => navigate('/certifications')}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+          >
+            <FaAward /> Certifications
+          </button>
         </div>
+
+        {/* 🔥 SMALL PREVIEW */}
+        <div className="flex justify-center">
+          <img
+            src="/pradeep-page1.png"
+            alt="Resume"
+            className="w-full max-w-xl rounded shadow-md border border-gray-700"
+          />
+        </div>
+
+        {/* Info */}
+        <p className="text-center text-gray-500 text-xs mt-4">
+          Updated resume preview
+        </p>
+
       </div>
     </div>
   )

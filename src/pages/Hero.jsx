@@ -7,7 +7,7 @@ import { FaArrowRight, FaDownload } from 'react-icons/fa'
  */
 const Hero = () => {
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 transition-colors duration-300">
+    <div className="min-h-screen pt-20 bg-transparent transition-colors duration-300">
       {/* Decorative Gold Horizontal Bar */}
       <div className="absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50"></div>
       
