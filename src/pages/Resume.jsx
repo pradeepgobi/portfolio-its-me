@@ -42,17 +42,12 @@ const Resume = () => {
             </button>
           </div>
 
-          {/* Resume Image Preview - Both Pages in Single Scrollable Box */}
+          {/* Resume Image Preview */}
           <div className="border-2 border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden max-w-2xl mx-auto bg-white dark:bg-gray-900 shadow-sm transition-colors duration-300">
-            <div className="max-h-64 overflow-y-auto">
+            <div>
               <img 
-                src="/pradeep-page1.jpg" 
+                src="/pradeep-page1.png" 
                 alt="Resume Page 1 - Pradeep" 
-                className="w-full h-auto mb-2"
-              />
-              <img 
-                src="/pradeep-page2.jpg" 
-                alt="Resume Page 2 - Pradeep" 
                 className="w-full h-auto"
               />
             </div>
