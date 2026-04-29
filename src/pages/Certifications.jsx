@@ -92,12 +92,10 @@ const Certifications = () => {
             <FaArrowLeft /> Back
           </button>
 
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl font-bold text-amber-400 mb-2">
             Certifications
           </h1>
-          <p className="text-gray-400">
-            My professional certifications
-          </p>
+          <div className="w-16 h-1 bg-white mx-auto mt-2 rounded"></div>
         </div>
 
         {/* 🔥 COMPACT GRID */}
