@@ -1,7 +1,7 @@
 # How to Add Your Profile Photo
 
-1. Save your profile photo (the one you showed me) as `profile.jpg`
-2. Place it in the `public` folder: `r:\protfolio\public\profile.jpg`
+1. Save your profile photo (the one you showed me) as `profile.png`
+2. Place it in the `public` folder: `r:\protfolio\public\profile.png`
 
 The image will automatically display in the About page with the gradient border animation!
 

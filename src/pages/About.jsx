@@ -15,7 +15,7 @@ const About = () => {
         <div className="flex flex-col sm:flex-row items-center gap-5 bg-gray-800/60 p-5 rounded-lg mb-8">
 
           <img
-            src="/profile.jpg"
+            src="/profile.png"
             alt="profile"
             className="w-28 h-28 rounded-full object-cover border-2 border-amber-400"
           />
