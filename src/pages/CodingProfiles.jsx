@@ -1,289 +1,170 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import PageTransition from '../components/PageTransition'
-import { FaGithub, FaExternalLinkAlt, FaStar, FaCodeBranch, FaTrophy } from 'react-icons/fa'
-import { SiLeetcode, SiHackerrank, SiCodechef, SiCodeforces } from 'react-icons/si'
+import React, { useEffect, useRef } from 'react';
+import { FaGithub, FaExternalLinkAlt, FaStar, FaCodeBranch, FaTrophy } from 'react-icons/fa';
+import { SiLeetcode, SiHackerrank, SiCodechef, SiCodeforces } from 'react-icons/si';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import GlassCard from '../components/ui/GlassCard';
+import AnimatedText from '../components/ui/AnimatedText';
 
-/**
- * Coding Profiles Page
- * Display coding platform profiles with stats and 3D effects
- */
+gsap.registerPlugin(ScrollTrigger);
+
 const CodingProfiles = () => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true })
+  const containerRef = useRef(null);
 
   const profiles = [
     {
       id: 1,
       platform: 'GitHub',
       icon: FaGithub,
-      username: '@yourusername',
-      link: 'https://github.com/yourusername',
+      username: '@PradeepGobi',
+      link: 'https://github.com/pradeepgobi',
       stats: [
-        { label: 'Repositories', value: '150+', icon: FaCodeBranch },
-        { label: 'Stars', value: '2.5K', icon: FaStar },
-        { label: 'Followers', value: '500+', icon: FaTrophy },
+        { label: 'Repositories', value: '15+', icon: FaCodeBranch },
+        { label: 'Stars', value: '10+', icon: FaStar },
+        { label: 'Followers', value: '5+', icon: FaTrophy },
       ],
-      color: '#333',
-      bgGradient: 'from-gray-700 to-gray-900',
+      color: 'text-brand-deepBlue',
+      bgHover: 'group-hover:bg-brand-deepBlue/5',
+      borderHover: 'hover:border-brand-deepBlue/30'
     },
     {
       id: 2,
       platform: 'LeetCode',
       icon: SiLeetcode,
-      username: '@yourusername',
-      link: 'https://leetcode.com/yourusername',
+      username: '@pradeepgobi',
+      link: 'https://leetcode.com',
       stats: [
-        { label: 'Problems Solved', value: '450+', icon: FaTrophy },
-        { label: 'Contest Rating', value: '1850', icon: FaStar },
-        { label: 'Global Rank', value: 'Top 5%', icon: FaCodeBranch },
+        { label: 'Problems Solved', value: '50+', icon: FaTrophy },
+        { label: 'Contest Rating', value: '1200', icon: FaStar },
+        { label: 'Global Rank', value: 'Top 30%', icon: FaCodeBranch },
       ],
-      color: '#FFA116',
-      bgGradient: 'from-orange-600 to-yellow-500',
+      color: 'text-brand-gold',
+      bgHover: 'group-hover:bg-brand-gold/5',
+      borderHover: 'hover:border-brand-gold/30'
     },
     {
       id: 3,
       platform: 'HackerRank',
       icon: SiHackerrank,
-      username: '@yourusername',
-      link: 'https://hackerrank.com/yourusername',
+      username: '@pradeepgobi',
+      link: 'https://hackerrank.com',
       stats: [
-        { label: 'Stars', value: '5 ⭐', icon: FaStar },
-        { label: 'Badges', value: '25+', icon: FaTrophy },
-        { label: 'Rank', value: 'Top 10%', icon: FaCodeBranch },
+        { label: 'Stars', value: '3 ⭐', icon: FaStar },
+        { label: 'Badges', value: '5+', icon: FaTrophy },
+        { label: 'Rank', value: 'Top 20%', icon: FaCodeBranch },
       ],
-      color: '#00EA64',
-      bgGradient: 'from-green-600 to-emerald-500',
+      color: 'text-green-600',
+      bgHover: 'group-hover:bg-green-50',
+      borderHover: 'hover:border-green-300'
     },
-    {
-      id: 4,
-      platform: 'CodeChef',
-      icon: SiCodechef,
-      username: '@yourusername',
-      link: 'https://codechef.com/users/yourusername',
-      stats: [
-        { label: 'Rating', value: '1920', icon: FaStar },
-        { label: 'Stars', value: '4 ⭐', icon: FaTrophy },
-        { label: 'Problems', value: '300+', icon: FaCodeBranch },
-      ],
-      color: '#5B4638',
-      bgGradient: 'from-amber-700 to-orange-800',
-    },
-    {
-      id: 5,
-      platform: 'Codeforces',
-      icon: SiCodeforces,
-      username: '@yourusername',
-      link: 'https://codeforces.com/profile/yourusername',
-      stats: [
-        { label: 'Rating', value: '1650', icon: FaStar },
-        { label: 'Rank', value: 'Expert', icon: FaTrophy },
-        { label: 'Contests', value: '75+', icon: FaCodeBranch },
-      ],
-      color: '#1F8ACB',
-      bgGradient: 'from-blue-600 to-cyan-500',
-    },
-  ]
+  ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  }
-
-  const cardVariants = {
-    hidden: { opacity: 0, rotateY: -90, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      rotateY: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.6, -0.05, 0.01, 0.99],
-      },
-    },
-  }
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Cards entrance
+      gsap.fromTo('.profile-card',
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out', scrollTrigger: { trigger: '.profile-grid', start: 'top 80%' } }
+      );
+      
+      // Stats entrance
+      gsap.fromTo('.overall-stat',
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.5)', scrollTrigger: { trigger: '.overall-stats-grid', start: 'top 85%' } }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <PageTransition>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+    <div className="min-h-screen pt-24 pb-16 relative z-10" ref={containerRef}>
+      <div className="container mx-auto px-6 max-w-7xl">
         
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl sm:text-6xl font-bold gradient-text mb-4">
-            Coding Profiles
-          </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+        <div className="mb-16 text-center flex flex-col items-center">
+          <AnimatedText text="Coding Profiles" className="text-4xl md:text-5xl font-display font-bold text-text-main mb-4" />
+          <p className="text-lg text-text-secondary max-w-2xl mx-auto mb-4 font-medium">
             My journey across competitive programming platforms
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto rounded-full mt-6"></div>
-        </motion.div>
+          <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
+        </div>
 
         {/* Profiles Grid */}
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="profile-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {profiles.map((profile) => {
-            const Icon = profile.icon
+            const Icon = profile.icon;
             return (
-              <motion.div
+              <GlassCard
                 key={profile.id}
-                variants={cardVariants}
-                whileHover={{
-                  y: -15,
-                  rotateY: 10,
-                  rotateX: 10,
-                  scale: 1.05,
-                  boxShadow: `0 30px 80px ${profile.color}60`,
-                }}
-                style={{
-                  transformStyle: 'preserve-3d',
-                  perspective: '1000px',
-                }}
-                className="glass-strong rounded-3xl p-6 relative overflow-hidden group cursor-pointer"
+                className={`profile-card group relative p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-premium !bg-white/60 ${profile.borderHover}`}
               >
-                {/* Background Gradient */}
-                <div 
-                  className={`absolute inset-0 bg-gradient-to-br ${profile.bgGradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
-                ></div>
-
-                {/* Content */}
-                <div className="relative z-10">
-                  {/* Platform Icon */}
-                  <motion.div
-                    whileHover={{ rotate: 360, scale: 1.2 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-7xl mb-6 flex justify-center"
-                    style={{ color: profile.color }}
-                  >
+                {/* Header */}
+                <div className="flex flex-col items-center mb-8">
+                  <div className={`w-20 h-20 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-4xl mb-4 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 ${profile.color} ${profile.bgHover}`}>
                     <Icon />
-                  </motion.div>
-
-                  {/* Platform Name */}
-                  <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                    {profile.platform}
-                  </h3>
-
-                  {/* Username */}
-                  <p className="text-gray-400 text-center mb-6">{profile.username}</p>
-
-                  {/* Stats */}
-                  <div className="space-y-4 mb-6">
-                    {profile.stats.map((stat, index) => {
-                      const StatIcon = stat.icon
-                      return (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="flex items-center justify-between glass rounded-lg p-3"
-                        >
-                          <div className="flex items-center gap-3">
-                            <StatIcon 
-                              className="text-xl" 
-                              style={{ color: profile.color }}
-                            />
-                            <span className="text-gray-300 text-sm">{stat.label}</span>
-                          </div>
-                          <span 
-                            className="font-bold text-lg"
-                            style={{ color: profile.color }}
-                          >
-                            {stat.value}
-                          </span>
-                        </motion.div>
-                      )
-                    })}
                   </div>
-
-                  {/* Visit Profile Button */}
-                  <motion.a
-                    href={profile.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all"
-                    style={{ 
-                      background: `linear-gradient(135deg, ${profile.color}, ${profile.color}99)` 
-                    }}
-                  >
-                    Visit Profile
-                    <FaExternalLinkAlt />
-                  </motion.a>
+                  <h3 className="text-2xl font-bold text-text-main font-display mb-1">{profile.platform}</h3>
+                  <p className="text-sm font-medium text-text-secondary">{profile.username}</p>
                 </div>
 
-                {/* 3D Shine Effect */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                {/* Stats */}
+                <div className="space-y-3 mb-8">
+                  {profile.stats.map((stat, index) => {
+                    const StatIcon = stat.icon;
+                    return (
+                      <div key={index} className="flex items-center justify-between bg-white/80 rounded-xl p-3 border border-slate-100 group-hover:bg-white transition-colors">
+                        <div className="flex items-center gap-3">
+                          <StatIcon className={`text-lg ${profile.color}`} />
+                          <span className="text-text-secondary text-sm font-medium">{stat.label}</span>
+                        </div>
+                        <span className={`font-bold text-sm ${profile.color}`}>
+                          {stat.value}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
 
-                {/* Magnetic Effect Lines */}
-                <motion.div
-                  className="absolute -top-1 -right-1 w-20 h-20 opacity-0 group-hover:opacity-30 transition-opacity"
-                  style={{ 
-                    background: `radial-gradient(circle, ${profile.color} 0%, transparent 70%)`,
-                    filter: 'blur(15px)',
-                  }}
-                />
-              </motion.div>
-            )
+                {/* Action */}
+                <a
+                  href={profile.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-white/80 border border-slate-200 text-text-main rounded-xl font-semibold hover:bg-white hover:text-brand-blue transition-colors shadow-sm"
+                >
+                  Visit Profile <FaExternalLinkAlt className="text-xs" />
+                </a>
+              </GlassCard>
+            );
           })}
-        </motion.div>
+        </div>
 
         {/* Overall Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="mt-20 glass-strong rounded-3xl p-8 md:p-12"
-        >
-          <h2 className="text-3xl font-bold text-center mb-8">
-            <span className="gradient-text">Overall Achievements</span>
+        <GlassCard className="p-8 md:p-12 text-center !bg-white/60">
+          <h2 className="text-3xl font-bold text-text-main font-display mb-10">
+            Overall Achievements
           </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="overall-stats-grid grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { icon: '🏆', value: '1000+', label: 'Problems Solved' },
-              { icon: '⭐', value: '50+', label: 'Contests Won' },
-              { icon: '🎯', value: '95%', label: 'Success Rate' },
-              { icon: '🔥', value: '200+', label: 'Day Streak' },
+              { icon: '🏆', value: '100+', label: 'Problems Solved' },
+              { icon: '⭐', value: '5+', label: 'Contests Attended' },
+              { icon: '🎯', value: '85%', label: 'Success Rate' },
+              { icon: '🔥', value: '30+', label: 'Day Streak' },
             ].map((achievement, index) => (
-              <motion.div
-                key={index}
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ 
-                  delay: 1 + index * 0.1, 
-                  type: 'spring',
-                  stiffness: 200,
-                }}
-                whileHover={{ scale: 1.1, y: -5 }}
-                className="glass rounded-2xl p-6 text-center"
-              >
-                <div className="text-5xl mb-3">{achievement.icon}</div>
-                <div className="text-3xl font-bold gradient-text mb-2">
+              <div key={index} className="overall-stat bg-white/80 p-6 rounded-2xl border border-white shadow-sm hover:scale-105 hover:shadow-premium hover:border-brand-blue/20 transition-all duration-300">
+                <div className="text-4xl mb-3">{achievement.icon}</div>
+                <div className="text-3xl font-bold text-brand-blue font-display mb-1">
                   {achievement.value}
                 </div>
-                <div className="text-gray-400 text-sm">{achievement.label}</div>
-              </motion.div>
+                <div className="text-text-secondary text-sm font-medium">{achievement.label}</div>
+              </div>
             ))}
           </div>
-        </motion.div>
-      </div>
-    </PageTransition>
-  )
-}
+        </GlassCard>
 
-export default CodingProfiles
+      </div>
+    </div>
+  );
+};
+
+export default CodingProfiles;

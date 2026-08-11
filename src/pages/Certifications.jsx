@@ -1,10 +1,14 @@
-import { FaArrowLeft, FaCalendar, FaAward } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
+import { FaArrowLeft, FaCalendar, FaAward } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
+import GlassCard from '../components/ui/GlassCard';
+import AnimatedText from '../components/ui/AnimatedText';
 
 const Certifications = () => {
-  const navigate = useNavigate()
-  const [selectedImage, setSelectedImage] = useState(null)
+  const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const containerRef = useRef(null);
 
   const certifications = [
     {
@@ -77,107 +81,121 @@ const Certifications = () => {
       image: '/cert/4.png',
       certificateId: 'GTE 1391464'
     }
-  ]
+  ];
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.cert-card',
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div className="min-h-screen pt-20 bg-transparent">
-      <div className="container mx-auto px-4 max-w-6xl py-12">
+    <div className="min-h-screen pt-24 pb-16 relative z-10" ref={containerRef}>
+      <div className="container mx-auto px-6 max-w-6xl">
 
         {/* Header */}
-        <div className="mb-10 text-center">
+        <div className="mb-12 text-center relative flex flex-col items-center">
           <button
             onClick={() => navigate('/resume')}
-            className="flex items-center gap-2 text-amber-400 mb-6"
+            className="absolute left-0 top-2 flex items-center gap-2 text-text-secondary hover:text-brand-blue font-semibold transition-colors"
           >
             <FaArrowLeft /> Back
           </button>
 
-          <h1 className="text-4xl font-bold text-amber-400 mb-2">
-            Certifications
-          </h1>
-          <div className="w-16 h-1 bg-white mx-auto mt-2 rounded"></div>
+          <AnimatedText text="Certifications" className="text-4xl md:text-5xl font-display font-bold text-text-main mb-4" />
+          <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
         </div>
 
-        {/* 🔥 COMPACT GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {certifications.map((cert) => (
-            <div
+            <GlassCard
               key={cert.id}
               onClick={() => setSelectedImage(cert.image)}
-              className="bg-gray-800/60 rounded-lg p-4 hover:scale-[1.03] cursor-pointer transition border border-gray-700 hover:border-amber-400"
+              className="cert-card cursor-pointer group hover:-translate-y-2 hover:shadow-premium hover:shadow-brand-blue/10 hover:border-brand-blue/40 transition-all duration-300 flex flex-col !bg-white/60"
             >
-              {/* Top */}
-              <div className="flex items-center gap-3 mb-3">
-                <img
-                  src={cert.image}
-                  alt={cert.title}
-                  className="w-14 h-14 rounded-md object-cover"
-                />
+              <div className="p-5 flex flex-col h-full">
+                {/* Top Section */}
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm flex-shrink-0 border border-brand-blue/10 bg-white">
+                    <img
+                      src={cert.image}
+                      alt={cert.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-text-main font-display leading-tight group-hover:text-brand-blue transition-colors mb-1">
+                      {cert.title}
+                    </h2>
+                    <p className="text-xs font-semibold text-text-secondary flex items-center gap-1">
+                      <FaAward className="text-brand-brightGold" /> {cert.issuer}
+                    </p>
+                  </div>
+                </div>
 
-                <div>
-                  <h2 className="text-lg text-white font-semibold leading-tight">
-                    {cert.title}
-                  </h2>
-                  <p className="text-xs text-amber-400 flex items-center gap-1">
-                    <FaAward /> {cert.issuer}
+                {/* Details */}
+                <p className="text-xs font-medium text-text-secondary/70 flex items-center gap-1 mb-3">
+                  <FaCalendar /> {cert.date}
+                </p>
+
+                <p className="text-sm text-text-secondary mb-4 line-clamp-2 flex-1 font-medium">
+                  {cert.description}
+                </p>
+
+                {/* Skills */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {cert.skills.map((skill, i) => (
+                    <span
+                      key={i}
+                      className="text-[10px] uppercase tracking-wider font-bold bg-white/80 border border-slate-200 text-text-secondary px-2 py-1 rounded"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+
+                {/* ID Footer */}
+                <div className="mt-auto pt-4 border-t border-slate-200/50">
+                  <p className="text-[10px] text-text-secondary/60 font-mono truncate">
+                    ID: {cert.certificateId}
                   </p>
                 </div>
               </div>
-
-              {/* Date */}
-              <p className="text-xs text-gray-400 flex items-center gap-1 mb-2">
-                <FaCalendar /> {cert.date}
-              </p>
-
-              {/* Description */}
-              <p className="text-sm text-gray-300 mb-3 line-clamp-2">
-                {cert.description}
-              </p>
-
-              {/* Skills */}
-              <div className="flex flex-wrap gap-2 mb-3">
-                {cert.skills.map((skill, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-amber-500/10 text-amber-300 px-2 py-1 rounded"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-
-              {/* ID */}
-              <p className="text-[10px] text-gray-500 truncate">
-                {cert.certificateId}
-              </p>
-            </div>
+            </GlassCard>
           ))}
         </div>
 
-        {/* 🔥 IMAGE MODAL */}
+        {/* Modal */}
         {selectedImage && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            
-            {/* Close */}
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-5 right-5 text-white text-3xl"
-            >
-              ✕
-            </button>
-
-            {/* Image */}
-            <img
-              src={selectedImage}
-              alt="Certificate"
-              className="max-w-[90%] max-h-[90%] rounded-lg shadow-2xl"
-            />
+          <div 
+            className="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="relative max-w-4xl w-full flex items-center justify-center">
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-12 right-0 md:-right-12 text-white text-3xl hover:text-brand-brightGold transition-colors"
+              >
+                ✕
+              </button>
+              <img
+                src={selectedImage}
+                alt="Certificate Full"
+                className="max-h-[85vh] w-auto rounded-xl shadow-2xl border border-white/20"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
           </div>
         )}
 
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Certifications
+export default Certifications;

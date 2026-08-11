@@ -1,88 +1,108 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
-/**
- * CustomCursor Component
- * Creates an animated cursor that follows mouse movement
- * Adapts size on hover over interactive elements
- */
 const CustomCursor = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isHovering, setIsHovering] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
+  const [isMobile, setIsMobile] = useState(false);
+  const cursorDotRef = useRef(null);
+  const cursorRingRef = useRef(null);
+  
   useEffect(() => {
-    // Check if device is mobile
     const checkMobile = () => {
-      setIsMobile(window.matchMedia('(hover: none) and (pointer: coarse)').matches)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+      setIsMobile(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
-    const updateMousePosition = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
+    if (isMobile) return;
 
-    const handleMouseEnter = () => setIsHovering(true)
-    const handleMouseLeave = () => setIsHovering(false)
+    // Set initial position out of view
+    gsap.set([cursorDotRef.current, cursorRingRef.current], { xPercent: -50, yPercent: -50, opacity: 0 });
 
-    window.addEventListener('mousemove', updateMousePosition)
+    const moveCursor = (e) => {
+      gsap.to(cursorDotRef.current, {
+        x: e.clientX,
+        y: e.clientY,
+        opacity: 1,
+        duration: 0.1,
+        ease: 'power2.out'
+      });
+      gsap.to(cursorRingRef.current, {
+        x: e.clientX,
+        y: e.clientY,
+        opacity: 1,
+        duration: 0.4,
+        ease: 'power3.out'
+      });
+    };
 
-    // Add hover effect to interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, input, textarea, [role="button"]')
+    const handleMouseEnter = () => {
+      gsap.to(cursorDotRef.current, { scale: 1.5, duration: 0.3 });
+      gsap.to(cursorRingRef.current, { scale: 1.8, borderColor: 'rgba(239, 68, 68, 0.4)', duration: 0.3 });
+    };
+    
+    const handleMouseLeave = () => {
+      gsap.to(cursorDotRef.current, { scale: 1, duration: 0.3 });
+      gsap.to(cursorRingRef.current, { scale: 1, borderColor: 'rgba(239, 68, 68, 0.6)', duration: 0.3 });
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+
+    // Initial binding
+    const interactiveElements = document.querySelectorAll('a, button, input, textarea, [role="button"]');
     interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', handleMouseEnter)
-      el.addEventListener('mouseleave', handleMouseLeave)
-    })
+      el.addEventListener('mouseenter', handleMouseEnter);
+      el.addEventListener('mouseleave', handleMouseLeave);
+    });
+
+    // MutationObserver to catch dynamically added interactive elements
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === 1) { // Element node
+              const newEls = node.querySelectorAll ? node.querySelectorAll('a, button, input, textarea, [role="button"]') : [];
+              const allEls = node.matches && node.matches('a, button, input, textarea, [role="button"]') ? [node, ...newEls] : newEls;
+              
+              allEls.forEach((el) => {
+                el.addEventListener('mouseenter', handleMouseEnter);
+                el.addEventListener('mouseleave', handleMouseLeave);
+              });
+            }
+          });
+        }
+      });
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition)
-      window.removeEventListener('resize', checkMobile)
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleMouseEnter)
-        el.removeEventListener('mouseleave', handleMouseLeave)
-      })
-    }
-  }, [])
+      window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('resize', checkMobile);
+      observer.disconnect();
+      document.querySelectorAll('a, button, input, textarea, [role="button"]').forEach((el) => {
+        el.removeEventListener('mouseenter', handleMouseEnter);
+        el.removeEventListener('mouseleave', handleMouseLeave);
+      });
+    };
+  }, [isMobile]);
 
-  // Don't render on mobile
-  if (isMobile) return null
+  if (isMobile) return null;
 
   return (
     <>
       {/* Main cursor dot */}
-      <motion.div
-        className="fixed top-0 left-0 w-4 h-4 bg-primary-500 rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        animate={{
-          x: mousePosition.x - 8,
-          y: mousePosition.y - 8,
-          scale: isHovering ? 1.5 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 500,
-          damping: 28,
-          mass: 0.5,
-        }}
+      <div
+        ref={cursorDotRef}
+        className="fixed top-0 left-0 w-3 h-3 bg-accent rounded-full pointer-events-none z-[9999] mix-blend-multiply"
       />
       
       {/* Cursor ring */}
-      <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border-2 border-primary-400 rounded-full pointer-events-none z-[9998] mix-blend-difference"
-        animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
-          scale: isHovering ? 1.8 : 1,
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 150,
-          damping: 15,
-          mass: 0.1,
-        }}
+      <div
+        ref={cursorRingRef}
+        className="fixed top-0 left-0 w-10 h-10 border border-accent/60 rounded-full pointer-events-none z-[9998]"
       />
     </>
-  )
-}
+  );
+};
 
-export default CustomCursor
+export default CustomCursor;
