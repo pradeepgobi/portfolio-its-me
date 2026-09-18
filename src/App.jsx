@@ -1,21 +1,14 @@
 import ThreeBackground from './components/ThreeBackground'
 import AppRoutes from './routes/AppRoutes'
-import CustomCursor from './components/CustomCursor'
 
 function App() {
   return (
-    <div className="relative min-h-screen flex flex-col bg-ambient-light overflow-hidden text-slate-800 font-sans">
+    <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-transparent">
       
-      {/* Custom Cursor */}
-      <CustomCursor />
-
-      {/* Subtle Grain Overlay */}
-      <div className="noise-overlay"></div>
-
-      {/* Global 3D Background */}
+      {/* Cybersecurity Canvas Background (Rendered at z-0) */}
       <ThreeBackground />
 
-      {/* Pages Content */}
+      {/* Page Content (Layered above background at z-10) */}
       <div className="relative z-10 flex flex-col min-h-screen">
         <AppRoutes />
       </div>

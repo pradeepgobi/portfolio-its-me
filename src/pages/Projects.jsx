@@ -76,7 +76,7 @@ const Projects = () => {
       <div className="container mx-auto px-6 max-w-6xl">
 
         <div className="mb-12 text-center flex flex-col items-center">
-          <AnimatedText text="Featured Projects" className="text-4xl md:text-5xl font-display font-bold text-text-main mb-4" />
+          <AnimatedText text="Featured Projects" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-4" />
           <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
         </div>
 
@@ -88,8 +88,8 @@ const Projects = () => {
               onClick={() => setFilter(cat)}
               className={`project-filter-btn px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm ${
                 filter === cat
-                  ? 'bg-brand-blue text-white shadow-brand-blue/20 border border-brand-blue'
-                  : 'bg-white/60 text-text-secondary hover:bg-white hover:text-text-main border border-white/80'
+                  ? 'bg-[#3368A0] text-white shadow-[#3368A0]/20 border border-[#3368A0]'
+                  : 'bg-white/60 text-[#3368A0] hover:bg-white hover:text-[#254F7A] border border-white/80'
               }`}
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -103,26 +103,26 @@ const Projects = () => {
             <GlassCard
               key={project.id}
               onClick={() => setSelectedProject(project)}
-              className="project-card group cursor-pointer flex flex-col w-full transition-all duration-500 hover:-translate-y-2 hover:shadow-premium hover:shadow-brand-blue/10 hover:border-brand-blue/30 !bg-white/50"
+              className="project-card group cursor-pointer flex flex-col w-full transition-all duration-500 hover:-translate-y-2 hover:shadow-premium hover:shadow-[#3368A0]/10 hover:border-[#3368A0]/30 !bg-white/50"
             >
               {/* Project Image/Icon Area */}
               <div className="w-full h-44 bg-white/60 rounded-xl mb-5 flex items-center justify-center text-6xl group-hover:scale-[1.02] transition-transform duration-500 overflow-hidden relative border border-white/50">
-                <div className="absolute inset-0 bg-brand-blue/5 z-10"></div>
+                <div className="absolute inset-0 bg-[#3368A0]/5 z-10"></div>
                 <div className="relative z-20 group-hover:-translate-y-2 transition-transform duration-500">{project.image}</div>
               </div>
 
               <div className="flex-1 flex flex-col items-center text-center">
                 {/* Title — centred */}
-                <h3 className="text-[1.05rem] font-bold text-text-main mb-2 font-display group-hover:text-brand-blue transition-colors leading-snug">
+                <h3 className="text-[1.05rem] font-bold text-[#254F7A] mb-2 font-display group-hover:text-[#3368A0] transition-colors leading-snug">
                   {project.title}
                 </h3>
-                <p className="text-sm text-text-secondary mb-5 flex-1 leading-relaxed">
+                <p className="text-sm text-[#3368A0] mb-5 flex-1 leading-relaxed">
                   {project.description}
                 </p>
 
                 <div className="flex flex-wrap gap-2 mb-5 justify-center">
                   {project.tech.map((t, i) => (
-                    <span key={i} className="text-xs font-semibold bg-white text-text-secondary px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                    <span key={i} className="text-xs font-semibold bg-white text-[#3368A0] px-3 py-1 rounded-full border border-slate-200 shadow-sm">
                       {t}
                     </span>
                   ))}
@@ -134,7 +134,7 @@ const Projects = () => {
                     target="_blank"
                     rel="noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1 flex items-center justify-center gap-2 bg-brand-deepBlue text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-brand-blue transition-colors shadow-sm"
+                    className="flex-1 flex items-center justify-center gap-2 bg-[#254F7A] text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#3368A0] transition-colors shadow-sm"
                   >
                     <FaGithub /> Source Code
                   </a>
@@ -158,22 +158,22 @@ const Projects = () => {
                 <div className="text-5xl">{selectedProject.image}</div>
                 <button 
                   onClick={() => setSelectedProject(null)}
-                  className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-brand-blue hover:text-white transition-colors"
+                  className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#3368A0] hover:text-white transition-colors"
                 >
                   <FaTimes />
                 </button>
               </div>
 
-              <h2 className="text-2xl font-bold text-text-main mb-4 font-display">
+              <h2 className="text-2xl font-bold text-[#254F7A] mb-4 font-display">
                 {selectedProject.title}
               </h2>
-              <p className="text-text-secondary mb-6 leading-relaxed">
+              <p className="text-[#3368A0] mb-6 leading-relaxed">
                 {selectedProject.longDescription}
               </p>
 
               <div className="flex flex-wrap gap-2 mb-8">
                 {selectedProject.tech.map((t, i) => (
-                  <span key={i} className="text-xs font-semibold bg-brand-blue/10 text-brand-blue px-3 py-1.5 rounded-full border border-brand-blue/20">
+                  <span key={i} className="text-xs font-semibold bg-[#3368A0]/10 text-[#3368A0] px-3 py-1.5 rounded-full border border-[#3368A0]/25">
                     {t}
                   </span>
                 ))}
@@ -183,7 +183,7 @@ const Projects = () => {
                 href={selectedProject.github}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full flex items-center justify-center gap-2 bg-brand-gradient text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all shadow-md hover:shadow-brand-blue/30"
+                className="w-full flex items-center justify-center gap-2 bg-[#3368A0] text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all shadow-md hover:shadow-[#3368A0]/30"
               >
                 <FaGithub /> View on GitHub
               </a>

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pradeep - Cybersecurity Specialist & Developer</title>
+    <script>
+      // Single Page Apps for GitHub Pages
+      // Redirect to index.html with route preserved
+      const path = window.location.pathname;
+      const repo = '/portfolio-its-me';
+      const cleanPath = path.startsWith(repo) ? path.slice(repo.length) : path;
+      sessionStorage.setItem('spa_redirect', cleanPath + window.location.search + window.location.hash);
+      window.location.replace(repo + '/');
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

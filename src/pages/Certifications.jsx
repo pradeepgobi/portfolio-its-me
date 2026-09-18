@@ -101,12 +101,12 @@ const Certifications = () => {
         <div className="mb-12 text-center relative flex flex-col items-center">
           <button
             onClick={() => navigate('/resume')}
-            className="absolute left-0 top-2 flex items-center gap-2 text-text-secondary hover:text-brand-blue font-semibold transition-colors"
+            className="absolute left-0 top-2 flex items-center gap-2 text-[#3368A0] hover:text-[#3368A0] font-semibold transition-colors"
           >
             <FaArrowLeft /> Back
           </button>
 
-          <AnimatedText text="Certifications" className="text-4xl md:text-5xl font-display font-bold text-text-main mb-4" />
+          <AnimatedText text="Certifications" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-4" />
           <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
         </div>
 
@@ -116,12 +116,12 @@ const Certifications = () => {
             <GlassCard
               key={cert.id}
               onClick={() => setSelectedImage(cert.image)}
-              className="cert-card cursor-pointer group hover:-translate-y-2 hover:shadow-premium hover:shadow-brand-blue/10 hover:border-brand-blue/40 transition-all duration-300 flex flex-col !bg-white/60"
+              className="cert-card cursor-pointer group hover:-translate-y-2 hover:shadow-premium hover:shadow-[#3368A0]/10 hover:border-[#3368A0]/40 transition-all duration-300 flex flex-col !bg-white/60"
             >
               <div className="p-5 flex flex-col h-full">
                 {/* Top Section */}
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm flex-shrink-0 border border-brand-blue/10 bg-white">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm flex-shrink-0 border border-[#3368A0]/10 bg-white">
                     <img
                       src={cert.image}
                       alt={cert.title}
@@ -129,21 +129,21 @@ const Certifications = () => {
                     />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-text-main font-display leading-tight group-hover:text-brand-blue transition-colors mb-1">
+                    <h2 className="text-lg font-bold text-[#254F7A] font-display leading-tight group-hover:text-[#3368A0] transition-colors mb-1">
                       {cert.title}
                     </h2>
-                    <p className="text-xs font-semibold text-text-secondary flex items-center gap-1">
+                    <p className="text-xs font-semibold text-[#3368A0] flex items-center gap-1">
                       <FaAward className="text-brand-brightGold" /> {cert.issuer}
                     </p>
                   </div>
                 </div>
 
                 {/* Details */}
-                <p className="text-xs font-medium text-text-secondary/70 flex items-center gap-1 mb-3">
+                <p className="text-xs font-medium text-[#3368A0]/70 flex items-center gap-1 mb-3">
                   <FaCalendar /> {cert.date}
                 </p>
 
-                <p className="text-sm text-text-secondary mb-4 line-clamp-2 flex-1 font-medium">
+                <p className="text-sm text-[#3368A0] mb-4 line-clamp-2 flex-1 font-medium">
                   {cert.description}
                 </p>
 
@@ -152,7 +152,7 @@ const Certifications = () => {
                   {cert.skills.map((skill, i) => (
                     <span
                       key={i}
-                      className="text-[10px] uppercase tracking-wider font-bold bg-white/80 border border-slate-200 text-text-secondary px-2 py-1 rounded"
+                      className="text-[10px] uppercase tracking-wider font-bold bg-white/80 border border-slate-200 text-[#3368A0] px-2 py-1 rounded"
                     >
                       {skill}
                     </span>
@@ -161,7 +161,7 @@ const Certifications = () => {
 
                 {/* ID Footer */}
                 <div className="mt-auto pt-4 border-t border-slate-200/50">
-                  <p className="text-[10px] text-text-secondary/60 font-mono truncate">
+                  <p className="text-[10px] text-[#3368A0]/60 font-mono truncate">
                     ID: {cert.certificateId}
                   </p>
                 </div>

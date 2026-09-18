@@ -10,10 +10,10 @@ const Footer = () => {
         
         {/* Brand / Copyright */}
         <div className="text-center md:text-left">
-          <p className="text-sm text-text-secondary font-medium">
-            &copy; {currentYear} <span className="font-bold text-text-main">Pradeep</span>. All rights reserved.
+          <p className="text-sm text-[#3368A0] font-medium">
+            &copy; {currentYear} <span className="font-bold text-[#254F7A]">Pradeep</span>. All rights reserved.
           </p>
-          <p className="text-xs text-text-secondary/70 mt-1">
+          <p className="text-xs text-[#3368A0]/70 mt-1">
             Designed & Built with React, GSAP & Tailwind
           </p>
         </div>
@@ -24,7 +24,7 @@ const Footer = () => {
             href="https://github.com/pradeepgobi"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-text-secondary hover:text-text-main hover:bg-white hover:shadow-sm border border-slate-200/50 transition-all duration-300 hover:border-brand-blue/30"
+            className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-[#3368A0] hover:text-[#254F7A] hover:bg-white hover:shadow-sm border border-slate-200/50 transition-all duration-300 hover:border-brand-blue/30"
             aria-label="GitHub"
           >
             <FaGithub />
@@ -33,14 +33,14 @@ const Footer = () => {
             href="https://linkedin.com/in/pradeep-gobi-899005330"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-text-secondary hover:text-brand-blue hover:bg-white hover:shadow-sm border border-slate-200/50 transition-all duration-300 hover:border-brand-blue/30"
+            className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-[#3368A0] hover:text-[#3368A0] hover:bg-white hover:shadow-sm border border-slate-200/50 transition-all duration-300 hover:border-brand-blue/30"
             aria-label="LinkedIn"
           >
             <FaLinkedin />
           </a>
           <a
             href="mailto:pradeepgobi8@gmail.com"
-            className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-text-secondary hover:text-brand-brightGold hover:bg-white hover:shadow-sm border border-slate-200/50 transition-all duration-300 hover:border-brand-gold/30"
+            className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-[#3368A0] hover:text-brand-brightGold hover:bg-white hover:shadow-sm border border-slate-200/50 transition-all duration-300 hover:border-brand-gold/30"
             aria-label="Email"
           >
             <FaEnvelope />

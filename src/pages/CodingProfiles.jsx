@@ -23,8 +23,8 @@ const CodingProfiles = () => {
         { label: 'Stars', value: '10+', icon: FaStar },
         { label: 'Followers', value: '5+', icon: FaTrophy },
       ],
-      color: 'text-brand-deepBlue',
-      bgHover: 'group-hover:bg-brand-deepBlue/5',
+      color: 'text-[#254F7A]',
+      bgHover: 'group-hover:bg-[#254F7A]/5',
       borderHover: 'hover:border-brand-deepBlue/30'
     },
     {
@@ -38,7 +38,7 @@ const CodingProfiles = () => {
         { label: 'Contest Rating', value: '1200', icon: FaStar },
         { label: 'Global Rank', value: 'Top 30%', icon: FaCodeBranch },
       ],
-      color: 'text-brand-gold',
+      color: 'text-[#3368A0]',
       bgHover: 'group-hover:bg-brand-gold/5',
       borderHover: 'hover:border-brand-gold/30'
     },
@@ -82,8 +82,8 @@ const CodingProfiles = () => {
         
         {/* Header */}
         <div className="mb-16 text-center flex flex-col items-center">
-          <AnimatedText text="Coding Profiles" className="text-4xl md:text-5xl font-display font-bold text-text-main mb-4" />
-          <p className="text-lg text-text-secondary max-w-2xl mx-auto mb-4 font-medium">
+          <AnimatedText text="Coding Profiles" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-4" />
+          <p className="text-lg text-[#3368A0] max-w-2xl mx-auto mb-4 font-medium">
             My journey across competitive programming platforms
           </p>
           <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
@@ -103,8 +103,8 @@ const CodingProfiles = () => {
                   <div className={`w-20 h-20 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-4xl mb-4 transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 ${profile.color} ${profile.bgHover}`}>
                     <Icon />
                   </div>
-                  <h3 className="text-2xl font-bold text-text-main font-display mb-1">{profile.platform}</h3>
-                  <p className="text-sm font-medium text-text-secondary">{profile.username}</p>
+                  <h3 className="text-2xl font-bold text-[#254F7A] font-display mb-1">{profile.platform}</h3>
+                  <p className="text-sm font-medium text-[#3368A0]">{profile.username}</p>
                 </div>
 
                 {/* Stats */}
@@ -115,7 +115,7 @@ const CodingProfiles = () => {
                       <div key={index} className="flex items-center justify-between bg-white/80 rounded-xl p-3 border border-slate-100 group-hover:bg-white transition-colors">
                         <div className="flex items-center gap-3">
                           <StatIcon className={`text-lg ${profile.color}`} />
-                          <span className="text-text-secondary text-sm font-medium">{stat.label}</span>
+                          <span className="text-[#3368A0] text-sm font-medium">{stat.label}</span>
                         </div>
                         <span className={`font-bold text-sm ${profile.color}`}>
                           {stat.value}
@@ -130,7 +130,7 @@ const CodingProfiles = () => {
                   href={profile.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-white/80 border border-slate-200 text-text-main rounded-xl font-semibold hover:bg-white hover:text-brand-blue transition-colors shadow-sm"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-white/80 border border-slate-200 text-[#254F7A] rounded-xl font-semibold hover:bg-white hover:text-[#3368A0] transition-colors shadow-sm"
                 >
                   Visit Profile <FaExternalLinkAlt className="text-xs" />
                 </a>
@@ -141,7 +141,7 @@ const CodingProfiles = () => {
 
         {/* Overall Stats */}
         <GlassCard className="p-8 md:p-12 text-center !bg-white/60">
-          <h2 className="text-3xl font-bold text-text-main font-display mb-10">
+          <h2 className="text-3xl font-bold text-[#254F7A] font-display mb-10">
             Overall Achievements
           </h2>
           <div className="overall-stats-grid grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -151,12 +151,12 @@ const CodingProfiles = () => {
               { icon: '🎯', value: '85%', label: 'Success Rate' },
               { icon: '🔥', value: '30+', label: 'Day Streak' },
             ].map((achievement, index) => (
-              <div key={index} className="overall-stat bg-white/80 p-6 rounded-2xl border border-white shadow-sm hover:scale-105 hover:shadow-premium hover:border-brand-blue/20 transition-all duration-300">
+              <div key={index} className="overall-stat bg-white/80 p-6 rounded-2xl border border-white shadow-sm hover:scale-105 hover:shadow-premium hover:border-[#3368A0]/25 transition-all duration-300">
                 <div className="text-4xl mb-3">{achievement.icon}</div>
-                <div className="text-3xl font-bold text-brand-blue font-display mb-1">
+                <div className="text-3xl font-bold text-[#3368A0] font-display mb-1">
                   {achievement.value}
                 </div>
-                <div className="text-text-secondary text-sm font-medium">{achievement.label}</div>
+                <div className="text-[#3368A0] text-sm font-medium">{achievement.label}</div>
               </div>
             ))}
           </div>
