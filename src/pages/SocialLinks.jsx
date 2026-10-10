@@ -1,19 +1,29 @@
 import React, { useEffect, useRef } from 'react';
-import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaEnvelope, FaEdit } from 'react-icons/fa';
 import gsap from 'gsap';
 import GlassCard from '../components/ui/GlassCard';
 import AnimatedText from '../components/ui/AnimatedText';
+import { useSiteData } from '../contexts/SiteDataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const SocialLinks = () => {
   const containerRef = useRef(null);
+  const { siteData } = useSiteData();
+  const { isAuthenticated, openEditor } = useAuth();
+
+  const socialInfo = siteData?.social || {
+    email: 'pradeepgobi8@gmail.com',
+    github: 'https://github.com/pradeepgobi/portfolio-its-me',
+    linkedin: 'https://linkedin.com/in/pradeep-gobi-899005330',
+  };
 
   const socialLinks = [
     {
       id: 1,
       name: 'LinkedIn',
       icon: FaLinkedin,
-      username: '@pradeep-gobi-899005330',
-      link: 'https://linkedin.com/in/pradeep-gobi-899005330',
+      username: socialInfo.linkedin ? (socialInfo.linkedin.replace(/https?:\/\/(www\.)?linkedin\.com\/in\//, '@').replace(/\/$/, '') || 'LinkedIn Profile') : '@pradeep-gobi',
+      link: socialInfo.linkedin || 'https://linkedin.com',
       color: 'bg-[#3368A0]/10 text-[#3368A0] border-[#3368A0]/25',
       hoverBorder: 'hover:border-[#3368A0]/50'
     },
@@ -21,8 +31,8 @@ const SocialLinks = () => {
       id: 2,
       name: 'GitHub',
       icon: FaGithub,
-      username: '@PradeepGobi',
-      link: 'https://github.com/pradeepgobi/portfolio-its-me',
+      username: socialInfo.github ? (socialInfo.github.replace(/https?:\/\/(www\.)?github\.com\//, '@').replace(/\/$/, '') || 'GitHub Profile') : '@PradeepGobi',
+      link: socialInfo.github || 'https://github.com',
       color: 'bg-[#3368A0]/10 text-[#254F7A] border-brand-deepBlue/20',
       hoverBorder: 'hover:border-brand-deepBlue/50'
     },
@@ -50,6 +60,15 @@ const SocialLinks = () => {
         <div className="mb-12 text-center flex flex-col items-center">
           <AnimatedText text="Let's Connect" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-4" />
           <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
+
+          {isAuthenticated && (
+            <button
+              onClick={() => openEditor('social')}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#254F7A] text-cyan-300 hover:bg-[#3368A0] transition-colors shadow-md border border-cyan-400/40"
+            >
+              <FaEdit /> Edit Contact Links In Live Portal
+            </button>
+          )}
         </div>
 
         {/* Links Grid */}
@@ -93,7 +112,7 @@ const SocialLinks = () => {
               I'm always interested in hearing about new projects, opportunities, or just having a chat about cybersecurity and tech.
             </p>
             <a
-              href="mailto:pradeepgobi8@gmail.com"
+              href={`mailto:${socialInfo.email || 'pradeepgobi8@gmail.com'}`}
               className="inline-flex items-center justify-center px-8 py-3 bg-[#3368A0] text-white rounded-full font-semibold hover:shadow-premium transition-all hover:scale-105 hover:-translate-y-1"
             >
               Say Hello

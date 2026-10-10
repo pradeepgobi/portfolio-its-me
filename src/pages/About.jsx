@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react';
-import { FaGraduationCap, FaHeart, FaBullseye, FaSchool } from 'react-icons/fa';
+import { FaGraduationCap, FaHeart, FaBullseye, FaSchool, FaEdit } from 'react-icons/fa';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import GlassCard from '../components/ui/GlassCard';
 import AnimatedText from '../components/ui/AnimatedText';
+import { useSiteData } from '../contexts/SiteDataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
   const containerRef = useRef(null);
+  const { siteData } = useSiteData();
+  const { isAuthenticated, openEditor } = useAuth();
+  const about = siteData.about || {};
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -26,12 +31,23 @@ const About = () => {
       <div className="container mx-auto px-6 max-w-6xl">
 
         {/* Section Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#3368A0]"></span>
-            <span className="text-[#3368A0] font-bold tracking-widest text-xs uppercase">About Me</span>
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#3368A0]"></span>
+              <span className="text-[#3368A0] font-bold tracking-widest text-xs uppercase">About Me</span>
+            </div>
+            <AnimatedText text="Get To Know Me" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-2" />
           </div>
-          <AnimatedText text="Get To Know Me" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-6" />
+
+          {isAuthenticated && (
+            <button
+              onClick={() => openEditor('about')}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#254F7A] text-cyan-300 border border-cyan-400/40 text-xs font-mono font-bold shadow-md hover:bg-[#3368A0] transition-colors cursor-pointer self-start md:self-auto"
+            >
+              <FaEdit /> Edit About Section
+            </button>
+          )}
         </div>
 
         {/* Main Content Layout */}
@@ -40,14 +56,14 @@ const About = () => {
           {/* Text Description */}
           <GlassCard className="about-card lg:col-span-5 p-8 md:p-10 !bg-white/60">
             <p className="text-lg text-[#3368A0] leading-relaxed mb-6 font-medium">
-              I am a passionate <span className="text-[#254F7A] font-bold">Cybersecurity Engineer</span> dedicated to uncovering vulnerabilities before malicious actors do. With a strong foundation in network security and ethical hacking, I approach problems with an attacker's mindset but a defender's goal.
+              {about.intro1 || "I am a passionate Cybersecurity Engineer dedicated to uncovering vulnerabilities before malicious actors do. With a strong foundation in network security and ethical hacking, I approach problems with an attacker's mindset but a defender's goal."}
             </p>
             <p className="text-lg text-[#3368A0] leading-relaxed font-medium mb-6">
-              Beyond security, I enjoy building modern, robust web applications. I believe that understanding development deeply is the key to securing it effectively. I am constantly learning, adapting, and pushing my boundaries.
+              {about.intro2 || "Beyond security, I enjoy building modern, robust web applications. I believe that understanding development deeply is the key to securing it effectively. I am constantly learning, adapting, and pushing my boundaries."}
             </p>
             {/* GitHub Portfolio Link */}
             <a
-              href="https://github.com/pradeepgobi/portfolio-its-me"
+              href={about.githubPortfolio || "https://github.com/pradeepgobi/portfolio-its-me"}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#254F7A] text-white text-sm font-bold rounded-full hover:bg-[#3368A0] transition-colors shadow-md"
@@ -68,11 +84,11 @@ const About = () => {
               </div>
               <div>
                 <h3 className="font-display font-bold text-[#254F7A] text-xl mb-1">College</h3>
-                <p className="text-[#3368A0] font-semibold">B.Tech Information Technology</p>
-                <p className="text-[#3368A0] text-sm font-bold mt-0.5">IV Year — Currently Pursuing</p>
-                <p className="text-sm text-[#3368A0] mt-1 opacity-80">Kongunadu College of Engineering and Technology</p>
-                <p className="text-xs text-[#3368A0] mt-0.5 opacity-70">Batch: 2023 – 2027 &nbsp;·&nbsp; Focus: Network Security & Application Security</p>
-                <p className="text-xs font-bold text-[#254F7A] mt-1">CGPA: 6.38</p>
+                <p className="text-[#3368A0] font-semibold">{about.degree || "B.Tech Information Technology"}</p>
+                <p className="text-[#3368A0] text-sm font-bold mt-0.5">{about.year || "IV Year — Currently Pursuing"}</p>
+                <p className="text-sm text-[#3368A0] mt-1 opacity-80">{about.collegeName || "Kongunadu College of Engineering and Technology"}</p>
+                <p className="text-xs text-[#3368A0] mt-0.5 opacity-70">{about.batch || "Batch: 2023 – 2027 · Focus: Network Security & Application Security"}</p>
+                <p className="text-xs font-bold text-[#254F7A] mt-1">CGPA: {about.cgpa || "6.38"}</p>
               </div>
             </GlassCard>
 
@@ -84,9 +100,9 @@ const About = () => {
               <div>
                 <h3 className="font-display font-bold text-[#254F7A] text-xl mb-1">School</h3>
                 <p className="text-[#3368A0] font-semibold">Higher Secondary Education</p>
-                <p className="text-[#3368A0] text-sm font-bold mt-0.5">Completed — 2022–23 Batch</p>
-                <p className="text-sm text-[#3368A0] mt-1 opacity-80">Bharathi Higher Secondary School</p>
-                <p className="text-xs font-bold text-[#254F7A] mt-1">Percentage: 75%</p>
+                <p className="text-[#3368A0] text-sm font-bold mt-0.5">{about.schoolCompleted || "Completed — 2022–23 Batch"}</p>
+                <p className="text-sm text-[#3368A0] mt-1 opacity-80">{about.schoolName || "Bharathi Higher Secondary School"}</p>
+                <p className="text-xs font-bold text-[#254F7A] mt-1">Percentage: {about.schoolPercentage || "75%"}</p>
               </div>
             </GlassCard>
 
@@ -97,7 +113,7 @@ const About = () => {
               </div>
               <div>
                 <h3 className="font-display font-bold text-[#254F7A] text-xl mb-1">Passion</h3>
-                <p className="text-[#3368A0] font-medium">Cybersecurity & Ethical Hacking</p>
+                <p className="text-[#3368A0] font-medium">{about.passionTitle || "Cybersecurity & Ethical Hacking"}</p>
                 <p className="text-sm text-[#3368A0] mt-1 opacity-80">Playing CTFs, exploring new vulnerabilities, and learning about infrastructure defense.</p>
               </div>
             </GlassCard>

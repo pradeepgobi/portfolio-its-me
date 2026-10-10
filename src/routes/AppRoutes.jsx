@@ -11,6 +11,7 @@ import Resume from '../pages/Resume'
 import ResumeUpload from '../pages/ResumeUpload'
 import Skills from '../pages/Skills'
 import SocialLinks from '../pages/SocialLinks'
+import AdminPortal from '../pages/AdminPortal'
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,8 @@ const AppRoutes = () => {
           <Route path="/resume" element={<Resume />} />
           <Route path="/resume-upload" element={<ResumeUpload />} />
           <Route path="/social" element={<SocialLinks />} />
+          <Route path="/admin" element={<AdminPortal />} />
+          <Route path="/login" element={<AdminPortal />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaArrowLeft, FaCalendar, FaAward } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaAward, FaEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import GlassCard from '../components/ui/GlassCard';
 import AnimatedText from '../components/ui/AnimatedText';
+import { useSiteData } from '../contexts/SiteDataContext';
+import { useAuth } from '../contexts/AuthContext';
 
-const Certifications = () => {
-  const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const containerRef = useRef(null);
-
-  const certifications = [
+const defaultCertifications = [
     {
       id: 1,
       title: 'Ethical Hacker',
@@ -83,6 +80,15 @@ const Certifications = () => {
     }
   ];
 
+const Certifications = () => {
+  const navigate = useNavigate();
+  const { siteData } = useSiteData();
+  const { isAuthenticated, openEditor } = useAuth();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const containerRef = useRef(null);
+
+  const certifications = siteData?.certifications || defaultCertifications;
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.cert-card',
@@ -108,6 +114,15 @@ const Certifications = () => {
 
           <AnimatedText text="Certifications" className="text-4xl md:text-5xl font-display font-bold text-[#254F7A] mb-4" />
           <div className="w-20 h-1 bg-brand-gold rounded-full"></div>
+
+          {isAuthenticated && (
+            <button
+              onClick={() => openEditor('certifications')}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#254F7A] text-cyan-300 hover:bg-[#3368A0] transition-colors shadow-md border border-cyan-400/40"
+            >
+              <FaEdit /> Edit Certifications In Live Portal
+            </button>
+          )}
         </div>
 
         {/* Grid */}

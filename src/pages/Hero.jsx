@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaShieldAlt, FaDownload, FaEye, FaGithub, FaLinkedin, FaTwitter, FaEnvelope,
-  FaTrophy, FaCode, FaLock, FaNetworkWired, FaCheckCircle, FaTerminal
+  FaTrophy, FaCode, FaLock, FaNetworkWired, FaCheckCircle, FaTerminal, FaEdit
 } from 'react-icons/fa';
 import { BiShield } from 'react-icons/bi';
 import { FiUsers } from 'react-icons/fi';
 import gsap from 'gsap';
+import { useSiteData } from '../contexts/SiteDataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 /* ═══════════════════════════════════════
    PALETTE: #3368A0 · #66A3BF · #C8DFDB · #F2EFE7
@@ -108,9 +110,19 @@ const Soc = ({ icon:Icon, href }) => (
 );
 
 export default function Hero() {
-  const ref       = useRef(null);
-  const typedName = useNameTypewriter('PRADEEP G');
-  const role      = useTypewriter(['Cybersecurity Engineer','Penetration Tester','CTF Player','Web Developer']);
+  const ref = useRef(null);
+  const { siteData } = useSiteData();
+  const { isAuthenticated, openEditor } = useAuth();
+
+  const hero = siteData.hero || {};
+  const social = siteData.social || {};
+
+  const typedName = useNameTypewriter(hero.name || 'PRADEEP G');
+  const role = useTypewriter(
+    hero.roles && hero.roles.length > 0
+      ? hero.roles
+      : ['Cybersecurity Engineer', 'Penetration Tester', 'CTF Player', 'Web Developer']
+  );
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -120,12 +132,17 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  const stats = [
-    { Icon:BiShield, num:'2+',    lbl:'Years Learning' },
-    { Icon:FaCode,   num:'3',     lbl:'Projects' },
-    { Icon:FaTrophy, num:'100+',  lbl:'CTF Challenges' },
-    { Icon:FiUsers,  num:'Focus', lbl:'Security' },
-  ];
+  const statIcons = [BiShield, FaCode, FaTrophy, FiUsers];
+  const stats = (hero.stats || [
+    { num:'2+',    lbl:'Years Learning' },
+    { num:'3',     lbl:'Projects' },
+    { num:'100+',  lbl:'CTF Challenges' },
+    { num:'Focus', lbl:'Security' },
+  ]).map((s, i) => ({
+    Icon: statIcons[i % statIcons.length],
+    num: s.num,
+    lbl: s.lbl,
+  }));
 
   return (
     <div ref={ref} style={{ minHeight:'100vh', paddingTop:76, paddingBottom:24, display:'flex', flexDirection:'column', position:'relative', overflow:'hidden' }}>
@@ -135,12 +152,33 @@ export default function Hero() {
       <div style={{ maxWidth:1240, width:'100%', margin:'0 auto', padding:'0 28px', display:'flex', alignItems:'center', gap:28, flex:1, flexWrap:'wrap' }}>
 
         {/* ══ LEFT ══ */}
-        <div style={{ flex:'1 1 440px', maxWidth:560, display:'flex', flexDirection:'column', justifyContent:'center', paddingTop:16 }}>
+        <div style={{ flex:'1 1 440px', maxWidth:560, display:'flex', flexDirection:'column', justifyContent:'center', paddingTop:16, position:'relative' }}>
+
+          {/* Quick Edit Pill for Admin */}
+          {isAuthenticated && (
+            <div style={{ marginBottom: 12 }}>
+              <button
+                onClick={() => openEditor('hero')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '4px 12px', borderRadius: 20,
+                  background: 'rgba(37, 79, 122, 0.90)', color: '#00E5FF',
+                  border: '1px solid rgba(0, 229, 255, 0.5)',
+                  fontSize: 11, fontFamily: 'monospace', fontWeight: 'bold',
+                  cursor: 'pointer', boxShadow: '0 2px 10px rgba(0,229,255,0.2)'
+                }}
+              >
+                <FaEdit /> Edit Hero Section
+              </button>
+            </div>
+          )}
 
           {/* Eyebrow */}
           <div className="hf" style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
             <span style={{ width:7, height:7, borderRadius:'50%', background:'#fff', boxShadow:'0 0 10px rgba(255,255,255,0.9)', display:'inline-block' }}/>
-            <span style={{ color:'#fff', fontWeight:700, fontSize:11.5, letterSpacing:'0.25em', textTransform:'uppercase' }}>Welcome To My Portfolio</span>
+            <span style={{ color:'#fff', fontWeight:700, fontSize:11.5, letterSpacing:'0.25em', textTransform:'uppercase' }}>
+              {hero.eyebrow || 'Welcome To My Portfolio'}
+            </span>
           </div>
 
           {/* Heading with Typewriter for PRADEEP G */}
@@ -161,7 +199,7 @@ export default function Hero() {
 
           {/* Description */}
           <p className="hf" style={{ color:'rgba(255,255,255,0.94)', fontSize:16.5, lineHeight:1.58, marginBottom:28, maxWidth:500 }}>
-            Specializing in Network Security and VAPT. I build and break systems to ensure they are robust, secure, and ready for real-world challenges.
+            {hero.description || 'Specializing in Network Security and VAPT. I build and break systems to ensure they are robust, secure, and ready for real-world challenges.'}
           </p>
 
           {/* Buttons */}
@@ -169,7 +207,7 @@ export default function Hero() {
             <Link to="/projects" style={{ display:'flex', alignItems:'center', gap:10, padding:'13px 24px', borderRadius:30, background:C.navy, color:'#fff', fontWeight:700, fontSize:14.5, textDecoration:'none', boxShadow:`0 6px 22px rgba(51,104,160,0.45)`, minWidth:180 }}>
               <FaShieldAlt style={{ fontSize:13 }}/> View Projects →
             </Link>
-            <a href="/pradeep.pdf" download="Pradeep_G_Resume.pdf" style={{ display:'flex', alignItems:'center', gap:9, padding:'13px 22px', borderRadius:30, ...G_CREAM, color:C.navy, fontWeight:700, fontSize:14.5, textDecoration:'none', boxShadow:'0 6px 22px rgba(51,104,160,0.18)', minWidth:180 }}>
+            <a href={hero.resumePdf || '/pradeep.pdf'} download={hero.resumeDownloadName || 'Pradeep_G_Resume.pdf'} style={{ display:'flex', alignItems:'center', gap:9, padding:'13px 22px', borderRadius:30, ...G_CREAM, color:C.navy, fontWeight:700, fontSize:14.5, textDecoration:'none', boxShadow:'0 6px 22px rgba(51,104,160,0.18)', minWidth:180 }}>
               <FaDownload style={{ fontSize:13 }}/> Download Resume
             </a>
             <Link to="/resume" style={{ display:'flex', alignItems:'center', gap:8, padding:'13px 20px', borderRadius:30, background:'rgba(255,255,255,0.85)', color:C.navyDk, fontWeight:700, fontSize:14, textDecoration:'none', boxShadow:'0 4px 16px rgba(51,104,160,0.14)', border:'1px solid rgba(255,255,255,0.9)' }}>
@@ -199,10 +237,10 @@ export default function Hero() {
               <span style={{ color:C.navyDk, fontWeight:700, fontSize:13 }}>Connect with me</span>
             </div>
             <div style={{ display:'flex', gap:9 }}>
-              <Soc icon={FaGithub}   href="https://github.com/pradeepgobi"/>
-              <Soc icon={FaLinkedin} href="https://linkedin.com/in/pradeepgobi"/>
-              <Soc icon={FaTwitter}  href="#"/>
-              <Soc icon={FaEnvelope} href="mailto:pradeepgobi8@gmail.com"/>
+              <Soc icon={FaGithub}   href={social.github || "https://github.com/pradeepgobi"}/>
+              <Soc icon={FaLinkedin} href={social.linkedin || "https://linkedin.com/in/pradeepgobi"}/>
+              <Soc icon={FaTwitter}  href={social.twitter || "#"}/>
+              <Soc icon={FaEnvelope} href={`mailto:${social.email || "pradeepgobi8@gmail.com"}`}/>
             </div>
           </div>
         </div>
@@ -265,9 +303,9 @@ export default function Hero() {
           </div>
 
           {/* ── Floating cards ── */}
-          <Card icon={FaLock}         title="Cybersecurity"  sub="Secure Tomorrow"      dark={false} pos={{ top:'6%',  left:'-2%',  animation:'floatY 4s ease-in-out infinite' }}/>
-          <Card icon={FaCheckCircle}  title="Ethical Hacker" sub="Think • Test • Secure" dark={true}  pos={{ top:'9%',  right:'-5%', animation:'floatY 3.8s ease-in-out 0.5s infinite' }}/>
-          <Card icon={FaNetworkWired} title="VAPT"           sub="Find • Fix • Fortify"  dark={false} pos={{ top:'52%', right:'-7%', animation:'floatY 4.2s ease-in-out 1s infinite' }}/>
+          <Card icon={FaLock}         title={hero.cards?.[0]?.title || "Cybersecurity"}  sub={hero.cards?.[0]?.sub || "Secure Tomorrow"}      dark={false} pos={{ top:'6%',  left:'-2%',  animation:'floatY 4s ease-in-out infinite' }}/>
+          <Card icon={FaCheckCircle}  title={hero.cards?.[1]?.title || "Ethical Hacker"} sub={hero.cards?.[1]?.sub || "Think • Test • Secure"} dark={true}  pos={{ top:'9%',  right:'-5%', animation:'floatY 3.8s ease-in-out 0.5s infinite' }}/>
+          <Card icon={FaNetworkWired} title={hero.cards?.[2]?.title || "VAPT"}           sub={hero.cards?.[2]?.sub || "Find • Fix • Fortify"}  dark={false} pos={{ top:'52%', right:'-7%', animation:'floatY 4.2s ease-in-out 1s infinite' }}/>
 
           {/* ── Script text ── */}
           <div style={{ position:'absolute', bottom:'5%', left:'-9%', transform:'rotate(-5deg)', zIndex:20, pointerEvents:'none', userSelect:'none' }}>

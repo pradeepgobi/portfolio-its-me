@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 dotenv.config();
 
@@ -96,6 +97,91 @@ const upload = multer({
 });
 
 // Routes
+
+// ── AUTHENTICATION SYSTEM ──────────────────────────────────────────────────
+const createAuthToken = (email) => {
+  const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+  const payload = Buffer.from(JSON.stringify({
+    email,
+    role: 'admin',
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 86400 * 7 // 7 days validity
+  })).toString('base64url');
+  const secret = process.env.JWT_SECRET || 'pradeep_portfolio_cyber_secret_key_2026_secure';
+  const signature = crypto.createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
+  return `${header}.${payload}.${signature}`;
+};
+
+const verifyAuthToken = (token) => {
+  if (!token) return null;
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const [header, payload, signature] = parts;
+    const secret = process.env.JWT_SECRET || 'pradeep_portfolio_cyber_secret_key_2026_secure';
+    const expectedSig = crypto.createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
+    if (signature !== expectedSig) return null;
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
+    if (data.exp && data.exp < Math.floor(Date.now() / 1000)) return null;
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
+// Admin Login endpoint (supports both /api/auth/login and /api/login)
+app.post(['/api/auth/login', '/api/login'], (req, res) => {
+  const { email, password } = req.body || {};
+  const cleanEmail = (email || '').trim().toLowerCase();
+  const cleanPass = (password || '').trim();
+
+  const targetEmail = (process.env.ADMIN_EMAIL || 'pradeepgobi8@gmail.com').trim().toLowerCase();
+  const targetPass = (process.env.ADMIN_PASS || 'pradeep@2006#').trim();
+
+  if (cleanEmail === targetEmail && cleanPass === targetPass) {
+    const token = createAuthToken(cleanEmail);
+    console.log(`[AUTH] Admin login successful for ${cleanEmail}`);
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: 'Authentication successful',
+      token,
+      user: {
+        email: cleanEmail,
+        role: 'admin',
+        name: 'Pradeep G'
+      }
+    });
+  }
+
+  console.warn(`[AUTH] Failed login attempt for email: ${cleanEmail}`);
+  return res.status(401).json({
+    success: false,
+    status: 401,
+    message: 'Invalid Admin Email or Password'
+  });
+});
+
+// Verify token endpoint
+app.get('/api/auth/verify', (req, res) => {
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader;
+  const decoded = verifyAuthToken(token);
+  if (decoded) {
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      valid: true,
+      user: decoded
+    });
+  }
+  return res.status(401).json({
+    success: false,
+    status: 401,
+    valid: false,
+    message: 'Invalid or expired token'
+  });
+});
 
 // Home route - API info
 app.get('/', (req, res) => {

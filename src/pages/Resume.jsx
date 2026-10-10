@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from 'react';
-import { FaDownload, FaExternalLinkAlt, FaAward, FaFilePdf, FaEye } from 'react-icons/fa';
+import { FaDownload, FaExternalLinkAlt, FaAward, FaFilePdf, FaEye, FaEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import GlassCard from '../components/ui/GlassCard';
 import AnimatedText from '../components/ui/AnimatedText';
+import { useSiteData } from '../contexts/SiteDataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const Resume = () => {
   const navigate = useNavigate();
   const containerRef = useRef(null);
+  const { siteData } = useSiteData();
+  const { isAuthenticated, openEditor } = useAuth();
+
+  const resumePdfPath = siteData?.hero?.resumeUrl || '/pradeep.pdf';
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -22,7 +28,7 @@ const Resume = () => {
 
   const handleDownload = () => {
     const link = document.createElement('a');
-    link.href = '/pradeep.pdf';
+    link.href = resumePdfPath;
     link.download = 'Pradeep_G_Resume.pdf';
     document.body.appendChild(link);
     link.click();
@@ -47,6 +53,15 @@ const Resume = () => {
           />
           <div className="w-20 h-1 bg-[#3368A0] rounded-full mb-6"></div>
 
+          {isAuthenticated && (
+            <button
+              onClick={() => openEditor('hero')}
+              className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#254F7A] text-cyan-300 hover:bg-[#3368A0] transition-colors shadow-md border border-cyan-400/40"
+            >
+              <FaEdit /> Edit Resume Link In Live Portal
+            </button>
+          )}
+
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-2">
             <button
@@ -56,7 +71,7 @@ const Resume = () => {
               <FaDownload /> Download Resume
             </button>
             <a
-              href="/pradeep.pdf"
+              href={resumePdfPath}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-7 py-3 bg-white/90 border border-[#3368A0]/30 text-[#254F7A] rounded-full font-bold text-sm shadow-md hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
@@ -83,12 +98,12 @@ const Resume = () => {
                 <span className="w-3 h-3 rounded-full bg-amber-400 inline-block shadow-sm"></span>
                 <span className="w-3 h-3 rounded-full bg-green-400 inline-block shadow-sm"></span>
                 <span className="ml-3 text-xs font-mono text-white/90 font-semibold tracking-wide">
-                  pradeep.pdf
+                  {resumePdfPath.split('/').pop() || 'resume.pdf'}
                 </span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
                 <a
-                  href="/pradeep.pdf"
+                  href={resumePdfPath}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-white/90 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-all font-semibold"
@@ -111,7 +126,7 @@ const Resume = () => {
             {/* Embedded PDF Viewer */}
             <div className="w-full bg-slate-100 rounded-b-xl overflow-hidden border border-slate-200 border-t-0" style={{ minHeight: '820px' }}>
               <iframe
-                src="/pradeep.pdf#view=FitH&toolbar=1"
+                src={`${resumePdfPath}#view=FitH&toolbar=1`}
                 title="Pradeep G Resume Preview"
                 className="w-full h-[850px] md:h-[1050px] border-0"
               />
@@ -121,7 +136,7 @@ const Resume = () => {
             <div className="text-center mt-3 text-xs text-slate-500 py-1 flex items-center justify-center gap-2">
               <span>Having trouble viewing the PDF preview?</span>
               <a
-                href="/pradeep.pdf"
+                href={resumePdfPath}
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#3368A0] font-bold underline hover:text-[#254F7A]"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUser, FaCode, FaBriefcase, FaFileAlt, FaEnvelope, FaBars, FaTimes, FaSun, FaMoon, FaArrowRight } from 'react-icons/fa';
+import { FaHome, FaUser, FaCode, FaBriefcase, FaFileAlt, FaEnvelope, FaBars, FaTimes, FaSun, FaMoon, FaArrowRight, FaShieldAlt, FaLock } from 'react-icons/fa';
+import { useAuth } from '../contexts/AuthContext';
 
 // Palette: #3368A0 · #66A3BF · #C8DFDB · #F2EFE7
 const NAVY  = '#3368A0';
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Navigation() {
+  const { isAuthenticated, openLoginModal, openEditor } = useAuth();
   const [open, setOpen]       = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location              = useLocation();
@@ -98,6 +100,34 @@ export default function Navigation() {
               </div>
             </div>
 
+            {/* Admin / Portal Trigger Button */}
+            <button
+              onClick={isAuthenticated ? openEditor : openLoginModal}
+              title={isAuthenticated ? "Open Live Website Editor (Alt+A)" : "Admin Portal Login (Ctrl+Shift+A)"}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '9px 14px', borderRadius: 30,
+                background: isAuthenticated ? '#254F7A' : 'rgba(255,255,255,0.7)',
+                color: isAuthenticated ? '#66A3BF' : '#3368A0',
+                border: isAuthenticated ? '1px solid #66A3BF' : '1px solid rgba(51,104,160,0.2)',
+                fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              {isAuthenticated ? (
+                <>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', display: 'inline-block', boxShadow: '0 0 8px #10B981' }} />
+                  <FaShieldAlt style={{ fontSize: 13, color: '#38BDF8' }} />
+                  <span>Editor</span>
+                </>
+              ) : (
+                <>
+                  <FaLock style={{ fontSize: 12, opacity: 0.8 }} />
+                  <span>Portal</span>
+                </>
+              )}
+            </button>
+
             {/* Let's Talk */}
             <Link to="/social" style={{
               display:'flex', alignItems:'center', gap:7,
@@ -149,6 +179,25 @@ export default function Navigation() {
                   </Link>
                 );
               })}
+              
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  if (isAuthenticated) openEditor();
+                  else openLoginModal();
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '12px 16px', borderRadius: 16,
+                  background: isAuthenticated ? '#254F7A' : 'rgba(51,104,160,0.08)',
+                  color: isAuthenticated ? '#fff' : '#3368A0',
+                  border: 'none', cursor: 'pointer',
+                  fontWeight: 600, fontSize: 15, textAlign: 'left',
+                }}
+              >
+                {isAuthenticated ? <FaShieldAlt style={{ color: '#38BDF8' }} /> : <FaLock />}
+                {isAuthenticated ? 'Live Website Editor' : 'Admin Portal Login'}
+              </button>
             </div>
           </div>
         )}
